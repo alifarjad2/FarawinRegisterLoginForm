@@ -150,6 +150,9 @@ setTimeout(() => {
         setTimeout(() => {
           const success = response.code == "200";
 
+          //save token
+          if (response.token) localStorage.token = response.token;
+
           if (success) console.log("result from api -> ", response);
           else console.error("error from api -> ", response);
           _loading = false;
