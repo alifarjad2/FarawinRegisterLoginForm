@@ -60,17 +60,9 @@ setTimeout(() => {
     validation.phone = false;
     syncActions();
     _timeout = setTimeout(() => {
-      /// *mentor no comment: این مورد رو نمی خواد کامنت بزارید این تابع اعداد فارسی و عربی رو انگلیسی می کنه
-      function toEnDigit(s) {
-        return s.replace(
-          /[٠-٩۰-۹]/g, // Detect all Persian/Arabic Digit in range of their Unicode with a global RegEx character set
-          function (a) {
-            return a.charCodeAt(0) & 0xf;
-          } // Remove the Unicode base(2) range that not match
-        );
-      }
-
-      validation.phone = toEnDigit(phone.value).match(/^09([0-9]{9})$/);
+      validation.phone =
+        /// *mentor no comment: این مورد رو نمی خواد کامنت بزارید این تابع اعداد فارسی و عربی رو انگلیسی می کنه
+        farawin.toEnDigit(phone.value).match(farawin.mobileRegex);
 
       if (validation.phone) {
         syncActions();
@@ -149,9 +141,6 @@ setTimeout(() => {
       return farawin.testLogin(uservalue, passvalue, (response) => {
         setTimeout(() => {
           const success = response.code == "200";
-
-          //save token
-          if (response.token) localStorage.token = response.token;
 
           if (success) console.log("result from api -> ", response);
           else console.error("error from api -> ", response);

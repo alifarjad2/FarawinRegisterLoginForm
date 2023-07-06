@@ -36,8 +36,8 @@ async function fetchFromApi(methodType, address, sendData, token) {
 
   try {
     body = JSON.stringify(sendData);
-    if(Object.values(sendData).find((v) => typeof v === "object"))
-    throw 'ورودی غیر مجاز است!'
+    if (Object.values(sendData).find((v) => typeof v === "object"))
+      throw "ورودی غیر مجاز است!";
   } catch {
     result = {
       code: -3,
@@ -136,6 +136,9 @@ const farawin = {
       username,
       password,
     });
+
+    //save token
+    if (result.token) localStorage.token = result.token;
 
     responseHandlerCallback && responseHandlerCallback(result);
     !responseHandlerCallback && alert(result?.message);
@@ -247,6 +250,27 @@ const farawin = {
         // if(success)
         //   window.location.assign('url...')
       }
+    );
+  },
+
+  /**
+   * رجکس برای بررسی صحت موبایل
+   */
+
+  mobileRegex: /^09([0-9]{9})$/,
+
+  /**
+   * تابع کمکی برای تبدیل اعداد فارسی به انگلیسی
+   * @param {string} numberString رشته شامل ورودی از کاربر
+   * @return {string} رشته بدون اعداد فارسی
+   *
+   */
+  toEnDigit: function (numberString) {
+    return (numberString + "" || "").replace(
+      /[٠-٩۰-۹]/g, // Detect all Persian/Arabic Digit in range of their Unicode with a global RegEx character set
+      function (a) {
+        return a.charCodeAt(0) & 0xf;
+      } // Remove the Unicode base(2) range that not match
     );
   },
 };
